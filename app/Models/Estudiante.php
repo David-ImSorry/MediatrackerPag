@@ -8,17 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Estudiante extends Model
 {
     use HasFactory;
+
+    protected $table = 'estudiante';
+
     protected $fillable = [
+        'id',
         'nombre',
         'apellido',
-        'documento',
+        'cedula',
         'email',
-        'celular',
-        'carreraid',
+        'telefono',
+        'direccion',
+        'carrera_id',
     ];
 
-public function carrera()
-{
-    return $this->belongsTo(Carrera::class, 'carreraid');
-}
+    public function carrera() {
+        return $this->belongsTo(Carrera::class);
+    }
 }

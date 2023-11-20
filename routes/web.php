@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CarreraController;
-use App\Http\Controllers\EstudianteController;
+use App\Http\Controllers\Carrera\CarreraController;
+use App\Http\Controllers\Estudiantes\EstudianteController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PublicController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,34 +17,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/',[PublicController::class,'index'])->name('public.index');
+
+// Route::get('/index', function () {
+//     return view('index');
+// })->middleware(['auth', 'verified'])->name('index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/carreras',[CarreraController::class, 'index'])->name('carreras.index');
-    Route::post('/carreras',[CarreraController::class, 'store'])->name('carreras.store');
-    Route::get('/carreras/create',[CarreraController::class, 'create'])->name('carreras.create');
-    Route::delete('/carreras/{carrera}',[CarreraController::class, 'destroy'])->name('carreras.destroy');
-    Route::put('/carreras/{carrera}',[CarreraController::class, 'update'])->name('carreras.update');
-    Route::get('/carreras/{carrera}/edit',[CarreraController::class, 'edit'])->name('carreras.edit');
-
-
-    Route::get('/estudiantes',[EstudianteController::class, 'index'])->name('estudiantes.index');
-    Route::post('/estudiantes',[EstudianteController::class, 'store'])->name('estudiantes.store');
-    Route::get('/estudiantes/create',[EstudianteController::class, 'create'])->name('estudiantes.create');
-    Route::delete('/estudiantes/{estudiante}',[EstudianteController::class, 'destroy'])->name('estudiantes.destroy');
-    Route::put('/estudiantes/{estudiante}',[EstudianteController::class, 'update'])->name('estudiantes.update');
-    Route::get('/estudiantes/{estudiante}/edit',[EstudianteController::class, 'edit'])->name('estudiantes.edit');
-
+    Route::resource('/estudiantes', EstudianteController::class);
+    Route::resource('/carreras', CarreraController::class);
 });
 
 require __DIR__.'/auth.php';
+require __DIR__.'/api.php';
